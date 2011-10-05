@@ -1,7 +1,7 @@
 <?php
 
 function get_totals() {
-  $html = @file_get_contents('http://www.squaw.com/snowfall-tracker-2010-11');
+  $html = @file_get_contents('http://www.squaw.com/snowfall-tracker');
 
   if (!$html) {
     return array();
