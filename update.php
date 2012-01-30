@@ -1,7 +1,7 @@
 <?php
 
 function get_totals() {
-  $html = @file_get_contents('http://www.squaw.com/snowfall-tracker');
+  $html = @file_get_contents('http://www.squaw.com/the-mountain/conditions/snowfall-tracker');
 
   if (!$html) {
     return array();
@@ -9,12 +9,12 @@ function get_totals() {
 
   // get season totals
   $season_totals = array();
-  if (preg_match('/<h2>Season Cumulative Total<\/h2>.*<\/table>/Uims', $html, $matches)) {
+  if (preg_match('/<h3>Season Cumulative Total<\/h3>.*<\/table>/Uims', $html, $matches)) {
     if (preg_match_all('/<h3>\s*(.+)\s*<\/h3>/Uims', $matches[0], $matches)) {
       $season_totals = $matches[1];
     }
   } else {
-    echo "Didn't get cumulative totals data";
+    echo "ERROR: Didn't get cumulative totals data\n";
     return array();
   }
 
@@ -74,7 +74,7 @@ function tweet($msg) {
 
 $totals = get_totals();
 if (!$totals) {
-  echo "Received no data";
+  echo "ERROR: Received no data\n";
   return;
 }
 $current = $totals[0];
