@@ -19,9 +19,8 @@ function get_totals() {
   }
 
   $totals = array();
-  #if (preg_match_all('/<tr .*>\s*<td .*>\s*<span class="date-display-single">\s*(.+)\s*<\/span>\s*<\/td>\s*<td .*>\s*(.+)\s*<\/td>\s*<td .*>\s*(.+)\s*<\/td>\s*<\/tr>/Uims', $html, $matches)) {
-  $regex = '/<tr .*>\s*';
-  $regex .= '<td>\s*<span class="date-display-single">\s*(.+)\s*<\/span>\s*<\/td>\s*';
+  $regex = '/<tr>\s*';
+  $regex .= '<td>\s*(\w+, \w+ \d+, \d\d\d\d)\s*<\/td>\s*';
   $regex .= '<td>\s*(.+)\s*<\/td>\s*';
   $regex .= '<td>\s*(.+)\s*<\/td>\s*';
   $regex .= '<td>\s*(.+)\s*<\/td>\s*';
