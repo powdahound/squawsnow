@@ -66,7 +66,7 @@ function tweet($msg) {
   echo "Tweeting: $msg";
 
   $out = array();
-  exec('twurl -d "status='.$msg.'" /1/statuses/update.xml', $out);
+  exec('twurl -d "status='.$msg.'" /1.1/statuses/update.json', $out);
   #print_r($out);
   return;
 }
