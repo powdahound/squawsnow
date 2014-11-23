@@ -1,26 +1,21 @@
 <?php
 
 function get_totals() {
-  $html = @file_get_contents('http://www.squaw.com/the-mountain/conditions/snowfall-tracker');
+  $html = @file_get_contents('http://squawalpine.com/skiing-riding/weather-conditions-webcams/squaw-valley-snowfall-tracker');
 
   if (!$html) {
     return array();
   }
 
   // get season totals
-  $season_totals = array();
-  if (preg_match('/<h3>Season Cumulative Total<\/h3>.*<\/table>/Uims', $html, $matches)) {
-    if (preg_match_all('/<h3>\s*(.+)\s*<\/h3>/Uims', $matches[0], $matches)) {
-      $season_totals = $matches[1];
-    }
-  } else {
-    echo "ERROR: Didn't get cumulative totals data\n";
+  if (preg_match('/Squaw Valley Snowfall Tracker/Uims', $html, $matches) === false) {
+    echo "ERROR: Incorrect page title\n";
     return array();
   }
 
   $totals = array();
   $regex = '/<tr>\s*';
-  $regex .= '<td>\s*(\w+, \w+ \d+, \d\d\d\d)\s*<\/td>\s*';
+  $regex .= '<th scope="row">\s*(\w+, \w+ \d+, \d\d\d\d)\s*<\/th>\s*';
   $regex .= '<td>\s*(.+)\s*<\/td>\s*';
   $regex .= '<td>\s*(.+)\s*<\/td>\s*';
   $regex .= '<td>\s*(.+)\s*<\/td>\s*';
@@ -41,7 +36,11 @@ function get_totals() {
         '8200t' => trim($t8200[$i])
       );
     }
+  } else {
+    echo "ERROR: Regex matched no data table\n";
+    return array();
   }
+
   return $totals;
 }
 
@@ -64,7 +63,6 @@ function update_last_seen($data) {
 function tweet($msg) {
   $msg = addcslashes($msg, '"');
   echo "Tweeting: $msg";
-
   $out = array();
   exec('twurl -d "status='.$msg.'" /1.1/statuses/update.json', $out);
   #print_r($out);
@@ -90,7 +88,7 @@ if (!$last) {
   #print_r($current);
 } else {
   $msg = $current['day']." — ";
-  $msg .= "New: {$current['6200n']} at 6200', {$current['8200n']} at 8200' — ";
+  $msg .= "New: {$current['6200n']} at 6200', {$current['8200n']} at 8000' — ";
   $msg .= " Totals: {$current['6200t']}/{$current['8200t']}";
   echo tweet($msg);
   update_last_seen($current);
