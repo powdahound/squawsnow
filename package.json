@@ -1,0 +1,15 @@
+{
+  "name": "squawsnow-name",
+  "version": "0.1.0",
+  "description": "Tweets new snowfalls at Squaw Valley from @SquawSnow",
+  "dependencies": {
+    "jsdom": "1.3.2"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://bitbucket.org/garret/squawsnow"
+  },
+  "scripts": {
+    "start": "node scraper.js"
+  }
+}
