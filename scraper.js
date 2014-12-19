@@ -1,47 +1,80 @@
 var jsdom = require("jsdom");
 
-jsdom.env(
-  "http://squawalpine.com/skiing-riding/weather-conditions-webcams/squaw-valley-snowfall-tracker",
-  ["http://code.jquery.com/jquery.js"],
-  handleHTMLResponse);
+// returns all records from all seasons
+function getAllRecords(cb) {
+  jsdom.env({
+    url: "http://squawalpine.com/skiing-riding/weather-conditions-webcams/squaw-valley-snowfall-tracker",
+    scripts: ["http://code.jquery.com/jquery.js"],
+    done: function (errors, window) {
+      if (errors) {
+        console.error("Unable to fetch site content", errors);
+        cb(errors, null);
+      } else {
+        cb(null, parseDataFromResponse(window))
+      }
+    }
+  });
+}
 
-function handleHTMLResponse(errors, window) {
-  if (errors) {
-    console.error("Unable to fetch site content", errors);
-    return null;
-  }
-
+function parseDataFromResponse(window) {
   var $ = window.$;
 
   // this div will contain the tabs and the content tables for each season
   var container = $("div.field-name-field-tabs");
   // the clickable tabs contain the season names. "2014-15", for example
-  var season_tabs = $("ul li a", container);
+  var seasonTabs = $("ul li a", container);
   // these tables contain the rows with data
-  var season_tables = $("div.tpl_table table", container);
+  var seasonTables = $("div.tpl_table table", container);
 
-  console.log("Found", season_tabs.length, "tabs and", season_tables.length, "season tables");
+  console.log("Found", seasonTabs.length, "tabs and", seasonTables.length, "season tables");
 
+  // gather data by season
+  // {
+  //    "2009-10": [
+  //      {
+  //        "date": "Thursday, May 27, 2010",
+  //        "6200-new": '1-2"',
+  //        "6200-total": '375"',
+  //        "8000-new": '2-4"',
+  //        "8000-total": '561"'
+  //      },
+  //      ...
+  //    ],
+  //    "2010-11": [...]
+  // }
   var data = {};
 
-  season_tabs.each(function(i) {
-    var season_name = $(this).html();
-    var season_rows = $('tr', season_tables[i]);
+  seasonTabs.each(function(i) {
+    var seasonName = $(this).html();
+    var seasonRows = $('tr', seasonTables[i]);
+    seasonRows = $(seasonRows.get().reverse());
 
-    console.log('Season', season_name, 'has', season_rows.length, 'entries');
+    console.log('Season', seasonName, 'has', seasonRows.length, 'entries');
+    data[seasonName] = [];
 
-    season_rows.each(function() {
-      var texts = $(this).children().map(function () {
+    seasonRows.each(function() {
+      // fill an array with the text content of each <td> in this row
+      var entryData = $(this).children().map(function () {
         return $(this).html();
       }).get();
-      console.log(texts);
+
+      // make sure this row has a valid date. this also ignores the "As of 6am" header rows
+      if (entryData[0].match(/\w+, \w+ \d+, \d\d\d\d/) == null) {
+        return null;
+      }
+
+      data[seasonName].push({
+        "date": entryData[0],
+        "6200-new": entryData[1],
+        "6200-total": entryData[2],
+        "8000-new": entryData[3],
+        "8000-total": entryData[4]
+      });
     });
 
-    //season_rows.each(function() {
-    //  $(this).children().each(function() {
-    //    console.log($(this).html());
-    //  });
-    //})
   });
 
+  return data;
 }
+
+module.exports.getAllRecords = getAllRecords;
