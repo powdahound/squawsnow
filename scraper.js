@@ -1,18 +1,20 @@
 var jsdom = require("jsdom");
 
 // returns all records from all seasons
-function getAllRecords(cb) {
-  jsdom.env({
-    url: "http://squawalpine.com/skiing-riding/weather-conditions-webcams/squaw-valley-snowfall-tracker",
-    scripts: ["http://code.jquery.com/jquery.js"],
-    done: function (errors, window) {
-      if (errors) {
-        console.error("Unable to fetch site content", errors);
-        cb(errors, null);
-      } else {
-        cb(null, parseDataFromResponse(window))
+function getAllRecords() {
+  return new Promise(function(resolve, reject) {
+    jsdom.env({
+      url: "http://squawalpine.com/skiing-riding/weather-conditions-webcams/squaw-valley-snowfall-tracker",
+      scripts: ["http://code.jquery.com/jquery.js"],
+      done: function (err, window) {
+        if (err) {
+          console.error("Unable to fetch site content", err);
+          reject(err);
+        } else {
+          resolve(parseDataFromResponse(window));
+        }
       }
-    }
+    });
   });
 }
 
