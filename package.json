@@ -11,10 +11,12 @@
     "type": "git",
     "url": "https://bitbucket.org/garret/squawsnow"
   },
+  "main": "main.js",
   "scripts": {
-    "start": "node tweeter.js"
+    "start": "node --harmony tweeter.js"
   },
   "engines": {
     "node": "0.11.x"
-  }
+  },
+  "license": "MIT"
 }
