@@ -9,13 +9,23 @@ function getAllRecords() {
       done: function (err, window) {
         if (err) {
           console.error("Unable to fetch site content", err);
-          reject(err);
+          resolve(null);
         } else {
           resolve(parseDataFromResponse(window));
         }
       }
     });
   });
+}
+
+function *getLatestAvailable() {
+  var records = yield getAllRecords();
+  if (records == null) {
+    return null;
+  }
+  var seasonIds = Object.keys(records);
+  var currentSeason = seasonIds[0];
+  return = records[currentSeason].pop();
 }
 
 function parseDataFromResponse(window) {
@@ -28,7 +38,7 @@ function parseDataFromResponse(window) {
   // these tables contain the rows with data
   var seasonTables = $("div.tpl_table table", container);
 
-  console.log("Found", seasonTabs.length, "tabs and", seasonTables.length, "season tables");
+  //console.log("Found", seasonTabs.length, "tabs and", seasonTables.length, "season tables");
 
   // gather data by season
   // {
@@ -51,7 +61,7 @@ function parseDataFromResponse(window) {
     var seasonRows = $('tr', seasonTables[i]);
     seasonRows = $(seasonRows.get().reverse());
 
-    console.log('Season', seasonName, 'has', seasonRows.length, 'entries');
+    //console.log('Season', seasonName, 'has', seasonRows.length, 'entries');
     data[seasonName] = [];
 
     seasonRows.each(function() {
@@ -80,3 +90,4 @@ function parseDataFromResponse(window) {
 }
 
 module.exports.getAllRecords = getAllRecords;
+module.exports.getLatestAvailable = getLatestAvailable;
