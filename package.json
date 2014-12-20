@@ -1,6 +1,6 @@
 {
   "name": "squawsnow-name",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "Tweets new snowfalls at Squaw Valley from @SquawSnow",
   "dependencies": {
     "jsdom": "1.3.2",
@@ -13,5 +13,8 @@
   },
   "scripts": {
     "start": "node tweeter.js"
+  },
+  "engines": {
+    "node": "0.11.x"
   }
 }
