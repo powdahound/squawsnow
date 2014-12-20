@@ -25,7 +25,7 @@ function *getLatestAvailable() {
   }
   var seasonIds = Object.keys(records);
   var currentSeason = seasonIds[0];
-  return = records[currentSeason].pop();
+  return records[currentSeason].pop();
 }
 
 function parseDataFromResponse(window) {

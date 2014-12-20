@@ -5,7 +5,7 @@ function getLatestTweeted() {
   return new Promise(function(resolve, reject) {
     fs.readFile(tmpFile, function(err, data) {
       if (err) {
-        console.log('Unable to read latest tweeted: ', err);
+        console.log('Unable to read latest snowfall:', err);
         resolve(null);
       } else {
         resolve(JSON.parse(data));
@@ -21,7 +21,7 @@ function storeLatestTweeted(data) {
       if (err) {
         reject(err);
       } else {
-        console.log('Stored latest tweeted: ', serialized);
+        console.log('Stored latest snowfall:', serialized);
         resolve(true);
       }
     });
