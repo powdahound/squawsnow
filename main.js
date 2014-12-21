@@ -2,6 +2,7 @@ var co = require('co');
 var scraper = require('./libs/scraper.js');
 var cache = require('./libs/cache.js').Cache;
 var twitter = require('./libs/twitter.js');
+var mail = require('./libs/mail.js');
 
 var main = function* () {
   // 1: get latest available from squaw's site
@@ -23,7 +24,8 @@ var main = function* () {
   } else if (latestTweeted['6200-total'] != latestAvailable['6200-total']
     || latestTweeted['8000-total'] != latestAvailable['8000-total']) {
     console.log('It snowed!');
-    yield twitter.tweetSnowfall(latestAvailable);
+    yield twitter.notify(latestAvailable);
+    yield mail.notify(latestAvailable);
     yield cache.storeLatestTweeted(latestAvailable);
   } else {
     console.log('No new snow. Latest was on', latestAvailable['date']);

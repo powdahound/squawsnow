@@ -18,5 +18,5 @@ A hacked together PHP script running on an old webhost powered these updates fro
 1. Check out the repo
 2. `heroku create`
 3. `git push heroku master`
-4. Set up environment vars using `heroku config`
-5. Set up a [scheduler](https://devcenter.heroku.com/articles/scheduler) to `run tweeter` every hour.
+4. Set up environment vars using `heroku config` (they're documented in `.env`)
+5. Set up a [scheduler](https://devcenter.heroku.com/articles/scheduler) to `node --harmony main.js` every hour.

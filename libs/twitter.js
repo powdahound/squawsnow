@@ -6,7 +6,7 @@ var twitter = new twitterAPI({
   callback: 'http://twitter.com/squawsnow/#this-callback-is-not-used'
 });
 
-function tweetSnowfall(data) {
+function notify(data) {
   var tweet = data['date'] + " — "
     + "New: " + data['6200-new'] + " at 6200', " + data['8000-new'] + " at 8000' — "
     + "Totals: " + data['6200-total'] + "/" + data['8000-total'];
@@ -34,4 +34,4 @@ function postStatus(text) {
   });
 }
 
-module.exports.tweetSnowfall = tweetSnowfall;
+module.exports.notify = notify;
