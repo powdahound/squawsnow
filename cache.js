@@ -8,9 +8,9 @@ var url = require('url');
 var FileCache = {
   tmpFile: "/tmp/squawsnow.json",
 
-  getLatestTweeted: function() {
-    return new Promise(function(resolve, reject) {
-      fs.readFile(FileCache.tmpFile, function(err, data) {
+  getLatestTweeted: function () {
+    return new Promise(function (resolve, reject) {
+      fs.readFile(FileCache.tmpFile, function (err, data) {
         if (err) {
           console.log('Unable to read latest snowfall:', err);
           resolve(null);
@@ -21,10 +21,10 @@ var FileCache = {
     });
   },
 
-  storeLatestTweeted: function(data) {
+  storeLatestTweeted: function (data) {
     var serialized = JSON.stringify(data);
-    return new Promise(function(resolve, reject) {
-      fs.writeFile(FileCache.tmpFile, serialized, function(err) {
+    return new Promise(function (resolve, reject) {
+      fs.writeFile(FileCache.tmpFile, serialized, function (err) {
         if (err) {
           reject(err);
         } else {
@@ -37,38 +37,33 @@ var FileCache = {
 };
 
 var RedisCache = {
-  client: null,
   latestTweetedKey: "latestTweeted",
 
-  getClient: function() {
-    if (RedisCache.client == null) {
-      // REDISTOGO_URL format is:
-      //  redis://redistogo:password@blah.redistogo.com:6379/
-      // Let's parse it so we can provide details explicitly
-      var parsed = url.parse(process.env.REDISTOGO_URL);
-      var client = redis.createClient(parsed.port, parsed.hostname, {
-        auth_pass: parsed.auth.split(':')[1]
-      });
-      RedisCache.client = coRedis(client);
-    }
-
-    return RedisCache.client;
+  getClient: function () {
+    // REDISTOGO_URL format is:
+    //  redis://redistogo:password@blah.redistogo.com:6379/
+    // Let's parse it so we can provide details explicitly
+    var parsed = url.parse(process.env.REDISTOGO_URL);
+    var client = redis.createClient(parsed.port, parsed.hostname, {
+      auth_pass: parsed.auth.split(':')[1]
+    });
+    return coRedis(client);
   },
 
-  getLatestTweeted: function*() {
+  getLatestTweeted: function* () {
     var client = this.getClient();
     var value = yield client.get(RedisCache.latestTweetedKey);
     if (value != null) {
       value = JSON.parse(value);
     }
-    client.end(); // fixme: should we do this at the end of the script somehow instead?
+    client.end(); // fixme: we should share one connection for the duration of the script
     return value;
   },
 
-  storeLatestTweeted: function*(data) {
+  storeLatestTweeted: function* (data) {
     var client = this.getClient();
     yield client.set(RedisCache.latestTweetedKey, JSON.stringify(data));
-    client.end(); // fixme: should we do this at the end of the script somehow instead?
+    client.end(); // fixme: we should share one connection for the duration of the script
     return true;
   }
 };

@@ -3,7 +3,7 @@ var scraper = require('./scraper.js');
 var cache = require('./cache.js').Cache;
 var twitter = require('./twitter.js');
 
-var main = function*() {
+var main = function* () {
   // 1: get latest available from squaw's site
   var latestAvailable = yield scraper.getLatestAvailable();
   if (latestAvailable == null) {
