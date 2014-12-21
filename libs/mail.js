@@ -1,5 +1,7 @@
+// the heroku addon sets MAILGUN_SMTP_LOGIN, so just pull the domain from there
+var domain = process.env.MAILGUN_SMTP_LOGIN.split('@')[1];
 var target = process.env.EMAIL_TARGET;
-var domain = process.env.MAILGUN_DOMAIN;
+
 var mailgun = require('mailgun-js')({
   apiKey: process.env.MAILGUN_API_KEY,
   domain: domain
