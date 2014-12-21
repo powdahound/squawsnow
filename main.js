@@ -1,7 +1,7 @@
 var co = require('co');
-var scraper = require('./scraper.js');
-var cache = require('./cache.js').Cache;
-var twitter = require('./twitter.js');
+var scraper = require('./libs/scraper.js');
+var cache = require('./libs/cache.js').Cache;
+var twitter = require('./libs/twitter.js');
 
 var main = function* () {
   // 1: get latest available from squaw's site
