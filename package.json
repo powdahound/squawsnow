@@ -3,10 +3,12 @@
   "version": "1.0.0",
   "description": "Tweets new snowfalls at Squaw Valley from @SquawSnow",
   "dependencies": {
+    "co": "4.0.0",
+    "co-redis": "^1.1.0",
     "contextify": "0.1.9",
     "jsdom": "1.3.2",
-    "co": "4.0.0",
-    "node-twitter-api": "1.5.0"
+    "node-twitter-api": "1.5.0",
+    "redis": "^0.12.1"
   },
   "repository": {
     "type": "git",
