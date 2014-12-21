@@ -28,8 +28,6 @@ var main = function* () {
   } else {
     console.log('No new snow. Latest was on', latestAvailable['date']);
   }
-
-  //cache.cache.end();
 };
 
 if (require.main === module) {
