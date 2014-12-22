@@ -7,4 +7,4 @@ app.use(function *() {
   this.body = JSON.stringify(records, null, 2);
 });
 
-app.listen('DYNO' in process.env ? 80 : 3000);
+app.listen(process.env.PORT);
