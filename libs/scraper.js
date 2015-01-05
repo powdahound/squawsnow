@@ -21,6 +21,7 @@ function getAllRecords() {
 function *getLatestAvailable() {
   var records = yield getAllRecords();
   if (records == null) {
+    console.error("Unable to get latest available data.");
     return null;
   }
   var seasonIds = Object.keys(records);
@@ -67,7 +68,7 @@ function parseDataFromResponse(window) {
     seasonRows.each(function() {
       // fill an array with the text content of each <td> in this row
       var entryData = $(this).children().map(function () {
-        return $(this).html();
+        return $(this).text().trim();
       }).get();
 
       // make sure this row has a valid date. this also ignores the "As of 6am" header rows
