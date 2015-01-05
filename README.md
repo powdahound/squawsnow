@@ -19,4 +19,4 @@ A hacked together PHP script running on an old webhost powered these updates fro
 2. `heroku create`
 3. `git push heroku master`
 4. Set up environment vars using `heroku config` (they're documented in `.env`)
-5. Set up a [scheduler](https://devcenter.heroku.com/articles/scheduler) to `node --harmony main.js` every hour.
+5. Set up a [scheduler](https://devcenter.heroku.com/articles/scheduler) to `curl -X POST http://squawsnow.herokuapp.com/update?key=your-key` every hour.
