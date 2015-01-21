@@ -1,6 +1,6 @@
 # @SquawSnow Tweeter
 
-A small project to tweet new snowfalls at Squaw Valley ski area via @SquawSnow. Note that this project isn't officially affiliated with or maintained by Squaw.
+A small project to tweet new snowfalls at Squaw Valley ski area via [@SquawSnow](https://twitter.com/squawsnow). Note that this project isn't officially affiliated with or maintained by Squaw.
 
 It scrapes their [snowfalls page](http://squawalpine.com/skiing-riding/weather-conditions-webcams/squaw-valley-snowfall-tracker) and sends out a tweet whenever a new entry is detected.
 
