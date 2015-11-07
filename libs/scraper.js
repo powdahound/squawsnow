@@ -24,9 +24,8 @@ function *getLatestAvailable() {
     console.error("Unable to get latest available data.");
     return null;
   }
-  var seasonIds = Object.keys(records);
-  var currentSeason = seasonIds[0];
-  return records[currentSeason].pop();
+  var currentSeasonData = records[records.length-1]['data'];
+  return currentSeasonData[currentSeasonData.length-1];
 }
 
 function parseDataFromResponse(window) {
@@ -42,20 +41,29 @@ function parseDataFromResponse(window) {
   //console.log("Found", seasonTabs.length, "tabs and", seasonTables.length, "season tables");
 
   // gather data by season
-  // {
-  //    "2009-10": [
-  //      {
-  //        "date": "Thursday, May 27, 2010",
-  //        "6200-new": '1-2"',
-  //        "6200-total": '375"',
-  //        "8000-new": '2-4"',
-  //        "8000-total": '561"'
-  //      },
-  //      ...
-  //    ],
-  //    "2010-11": [...]
-  // }
-  var data = {};
+  // [
+  //   {
+  //     name: "2009-10",
+  //     snow-days: 64,
+  //     6200-total: "375"",
+  //     8000-total: "561"",
+  //     data: [
+  //       {
+  //         date: "Saturday, October 3, 2009",
+  //         6200-new: "2"",
+  //         6200-total: "2"",
+  //         8000-new: "4"",
+  //         8000-total: "4""
+  //       },
+  //       ...
+  //     ],
+  //   },
+  //   {
+  //     name: "2010-11",
+  //     ...
+  //   }
+  // ]
+  var data = [];
 
   seasonTabs.each(function(i) {
     var seasonName = $(this).html();
@@ -63,7 +71,7 @@ function parseDataFromResponse(window) {
     seasonRows = $(seasonRows.get().reverse());
 
     //console.log('Season', seasonName, 'has', seasonRows.length, 'entries');
-    data[seasonName] = [];
+    var seasonData = [];
 
     seasonRows.each(function() {
       // fill an array with the text content of each <td> in this row
@@ -76,7 +84,7 @@ function parseDataFromResponse(window) {
         return null;
       }
 
-      data[seasonName].push({
+      seasonData.push({
         "date": entryData[0],
         "6200-new": entryData[1],
         "6200-total": entryData[2],
@@ -85,6 +93,18 @@ function parseDataFromResponse(window) {
       });
     });
 
+    data.push({
+      "name": seasonName,
+      "snow-days": seasonData.length,
+      "6200-total": seasonData[seasonData.length-1]["6200-total"],
+      "8000-total": seasonData[seasonData.length-1]["8000-total"],
+      "data": seasonData,
+    });
+  });
+
+  // sort by season name
+  data = data.sort(function(a, b) {
+    return a['name'] > b['name']
   });
 
   return data;
