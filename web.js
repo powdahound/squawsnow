@@ -20,7 +20,7 @@ app.post('/update', function *(next) {
     this.status = 401;
     this.body = "ERROR: Invalid key";
     return;
-  };
+  }
 
   // 1: get latest available from squaw's site
   var latestAvailable = yield scraper.getLatestAvailable();
@@ -54,3 +54,4 @@ app.post('/update', function *(next) {
 });
 
 app.listen(process.env.PORT);
+console.log('Listening on port', process.env.PORT);
