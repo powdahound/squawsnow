@@ -9,10 +9,11 @@ A hacked together PHP script running on an old webhost powered these updates fro
 ## Running locally
 
 1. Check out the repo
-2. Have the heroku toolkit installed
-3. `npm install` (assuming you already have node >=0.11.x, npm, etc)
+2. Install the [Heroku toolbelt](https://devcenter.heroku.com/articles/heroku-cli)
+3. Install node modules with `npm install` or `yarn` (assuming you already have node >=8.x)
 4. Override necessary environment variables in `.env`
-5. `foreman start`
+5. `heroku local`
+6. `curl -X POST http://localhost:3000/update?key=override-me`
 
 ## Running on Heroku
 1. Check out the repo

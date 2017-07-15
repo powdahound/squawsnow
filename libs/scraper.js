@@ -1,26 +1,18 @@
 var jsdom = require("jsdom");
+const { JSDOM } = jsdom;
+
+const trackerUrl = "http://squawalpine.com/skiing-riding/weather-conditions-webcams/squaw-valley-snowfall-tracker";
 
 // returns all records from all seasons
 function getAllRecords() {
-  return new Promise(function(resolve, reject) {
-    jsdom.env({
-      url: "http://squawalpine.com/skiing-riding/weather-conditions-webcams/squaw-valley-snowfall-tracker",
-      scripts: ["http://code.jquery.com/jquery.js"],
-      done: function (err, window) {
-        if (err) {
-          console.error("Unable to fetch site content", err);
-          resolve(null);
-        } else {
-          resolve(parseDataFromResponse(window));
-        }
-      }
-    });
+  return JSDOM.fromURL(trackerUrl).then(dom => {
+    return parseDataFromResponse(dom);
   });
 }
 
 function *getLatestAvailable() {
   var records = yield getAllRecords();
-  if (records == null) {
+  if (records === null) {
     console.error("Unable to get latest available data.");
     return null;
   }
@@ -28,8 +20,8 @@ function *getLatestAvailable() {
   return currentSeasonData[currentSeasonData.length-1];
 }
 
-function parseDataFromResponse(window) {
-  var $ = window.$;
+function parseDataFromResponse(dom) {
+  const $ = require('jQuery')(dom.window);
 
   // this div will contain the tabs and the content tables for each season
   var container = $("div.field-name-field-tabs");
