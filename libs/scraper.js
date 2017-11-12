@@ -21,7 +21,7 @@ function *getLatestAvailable() {
 }
 
 function parseDataFromResponse(dom) {
-  const $ = require('jQuery')(dom.window);
+  const $ = require("jquery")(dom.window);
 
   // this div will contain the tabs and the content tables for each season
   var container = $("div.field-name-field-tabs");

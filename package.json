@@ -19,7 +19,7 @@
   },
   "main": "main.js",
   "scripts": {
-    "start": "node --harmony tweeter.js"
+    "start": "node --harmony web.js"
   },
   "engines": {
     "node": "8.1.x"
